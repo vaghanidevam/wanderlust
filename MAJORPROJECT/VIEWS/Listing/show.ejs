@@ -1,0 +1,166 @@
+<%- layout("./layout/boilerplate") %>
+<!--<body>
+
+    <h1>Listing Details: </h1>
+
+    <ul>
+        <li><%= listingg.title %></li>
+        <li><%= listingg.description %></li>
+        <li> &#8377 <%= listingg.price.toLocaleString("en-IN"); %>/Night</li>
+        <li><%= listingg.location %></li>
+        <li><%= listingg.country %></li>
+    </ul>
+    <br/>
+    <a href="/listings/<%= listingg._id %>/edit">edit your listing</a>
+    <br/>
+    <form action="/listings/<%= listingg._id %>?_method=DELETE" method="POST">
+        <button>Delete</button>
+    </form>
+</body> -->
+
+    <style>
+        body {
+            background-color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .image-container {
+            width: 100%;
+            max-width: 50rem;
+            margin: 20px auto;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 20rem;
+            border-radius: 15px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .details-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+        }
+
+        .details-container h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .details-container p {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .details-container .buttons {
+            margin-top: 1.5rem;
+        }
+
+        .details-container .buttons a,
+        .details-container .buttons form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .details-container .buttons button {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .edit-button {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .edit-button:hover {
+            background-color: #2980b9;
+        }
+
+        .delete-button {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Media Query for smaller screens */
+        @media (max-width: 768px) {
+            .details-container {
+                padding: 15px;
+            }
+
+            .details-container h2 {
+                font-size: 28px;
+            }
+
+            .details-container p {
+                font-size: 16px;
+            }
+
+            .details-container .buttons button {
+                font-size: 16px;
+                padding: 8px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .details-container {
+                padding: 10px;
+            }
+
+            .details-container h2 {
+                font-size: 24px;
+            }
+
+            .details-container p {
+                font-size: 14px;
+            }
+
+            .details-container .buttons button {
+                font-size: 14px;
+                padding: 6px 10px;
+            }
+
+            .details-container .buttons a,
+            .details-container .buttons form {
+                margin-right: 0;
+                margin-bottom: 10px;
+                display: block;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container">
+        <img src="<%= listingg.image %>" alt="<%= listingg.title %>">
+    </div>
+
+    <div class="details-container">
+        <h2><%= listingg.title %></h2>
+
+        <p><strong>Price:</strong> &#8377 <%= listingg.price.toLocaleString("en-IN"); %>/Night</p>
+        <p><strong>Description:</strong> <%= listingg.description %></p>
+        <p><strong>Location:</strong> <%= listingg.location %></p>
+        <p><strong>Country:</strong> <%= listingg.country %></p>
+
+        <div class="buttons">
+            <a href="/listings/<%= listingg._id %>/edit">
+                <button class="edit-button">Edit</button>
+            </a>
+            <form action="/listings/<%= listingg._id %>?_method=DELETE" method="POST">
+                <button type="submit" class="delete-button">Delete</button>
+            </form>
+        </div>
+    </div>
+</body>
