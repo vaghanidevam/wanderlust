@@ -1,12 +1,27 @@
+if(!process.env.NODE_ENV != "production"){
+    const dotenv = require('dotenv');
+}
+
+
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const listing = require("../MAJORPROJECT/models/listing.js");
 const path = require("path");
 const mehtodOverride =  require("method-override");
 const ejsMate = require("ejs-mate");
-const asyncWrap = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
+const Joi = require('joi');
+const session = require("express-session");
+const MongoStore = require('connect-mongo');
+const flash = require("connect-flash");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const user = require("../MAJORPROJECT/models/users.js");
+const listingRouter = require("../MAJORPROJECT/routes/listings.js");
+const reviewRouter = require("../MAJORPROJECT/routes/reviewws.js");
+const userRouter = require("../MAJORPROJECT/routes/user.js");
+
 
 app.set("view engine", "ejs");
 app.set("VIEWS", path.join(__dirname, "VIEWS"));
@@ -14,119 +29,116 @@ app.use(express.static(path.join(__dirname, "PUBLIC")));
 app.use(express.urlencoded({extended:true}));
 app.use(mehtodOverride("_method"));
 app.engine("ejs", ejsMate);
+app.use(express.json());
 
 
 
-const MONOGO_URL = "mongodb://localhost:27017/wanderlust";
 
+
+
+/////////////////////////////////////////////////////////////////
+const MONOGO_URL = "mongodb+srv://wanderlust65:PJPTENxFaxnR40uN@cluster0.v6itl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 main()
 .then(()=>{
     console.log("connected to DB");
 })
 .catch((err)=>{
    console.log(err);
+   
 })
 
 async function main(){
     await mongoose.connect(MONOGO_URL);
 }
 
+/////////////////////////////////////////////////////////////////
 
-//* app.get("/test", (req, res)=>{
-//     let place1 = new listing({
-//        title: "helo",
-//        description:"hi",
-//        price: 399,
-//        country: "india"
-//    });
-//    place1.save();
-//    console.log("done");
+const store = MongoStore.create({
+    mongoUrl: 'mongodb+srv://wanderlust65:PJPTENxFaxnR40uN@cluster0.v6itl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+    crypto:{
+        secret: "wanderlust"
+    },
+    touchAfter: 24*3600
+  });
+//   store.on("error", ()=>{
+//     console.log("error in mongo session store ", err);
+//   });
+
+const sessionOptions = {
+    store:store,
+    secret: "wanderlust",
+    resave: false,
+    saveUninitialized: true,
+    cookie:{
+        expires: Date.now() + 10 * 24 * 60 *60 *1000,
+        maxAge: 10 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+    },
+};
+
+
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(user.authenticate()));
+passport.serializeUser(user.serializeUser());
+passport.deserializeUser(user.deserializeUser()); 
+
+// app.get("/demo", async (req,res)=>{
+//     let user1 = user ({
+//         email: "12w@gmail.com",
+//         username: "helwo"
+//     });
+
+//    let u = await user.register(user1, "hellwoword");
+//     res.redirect("/listings");
+
 // })
 
+////////////////////////////////////////////////////////////////
 
-app.get("/", (req,res)=>{
-    res.send("helo");
-});
-
-
-
-
-// index route
-
-app.get("/listings", asyncWrap( async (req, res)=>{
-  const alllisting =  await listing.find({});
-  res.render("./Listing/index.ejs", {alllisting});
-}));
-
-// new route
-
-app.get("/listings/new", (req,res)=>{
-    res.render("./Listing/new.ejs");
-});
-
-// new create route
-
-app.post("/listings", asyncWrap( async (req, res, next)=>{
-     if(!req.body.listing){
-        new ExpressError(400, "send valid data for listing");
-     }
-
-        const list = await new listing (req.body.listing);
-        await list.save();
-        res.redirect("/listings");
-        
-   
-}));
-
-
-//show route
-
-app.get("/listings/:id", asyncWrap( async (req, res)=>{
-
-    let {id} = req.params;
-    const listingg =  await listing.findById(id);
-    res.render("./Listing/show.ejs", {listingg});
-
-}));
-
-//edit route
-
-app.get("/listings/:id/edit",asyncWrap( ( async (req, res)=>{
+app.use((req, res, next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    res.locals.curruser = req.user; 
     
-    let {id} = req.params;
-    const listingg =  await listing.findById(id);
-    res.render("./listing/edit.ejs", {listingg});
-})));
+// console.log('Cloud Name:', process.env.CLOUD_NAME);
+// console.log('API Key:', process.env.CLOUD_API_KEY);
+// console.log('API Secret:', process.env.CLOUD_API_SECRET);
 
-// update route
-app.put("/listings/:id",asyncWrap( async (req, res)=>{
-    if(!req.body.listing){
-        new ExpressError(400, "send valid data for listing");
-     }
-    let {id} = req.params;
-    await listing.findByIdAndUpdate(id, {...req.body.listing});
-    res.redirect(`/listings/${id}`);
-}));
+    next();
+});
 
-//delete route
 
-app.delete("/listings/:id", asyncWrap( async (req, res)=>{
-    let {id} = req.params;
-    await listing.findByIdAndDelete(id);
-    res.redirect("/listings");
-}));
+/////////////////////////////////////////////////////////////////
+
+
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
+
 
 app.all('*',(req, res, next)=>{
     next(new ExpressError(404,"page not found!"));
 });
 
 app.use((err, req, res, next)=>{
-    const {statusCode = 500, message} = err;
-    res.render("./listing/error.ejs", {statusCode, message});
+const {statusCode = 500, message} = err;
+ res.render("./listing/error.ejs", {statusCode, message});
 });
+
+
+/////////////////////////////////////////////////////////////////
+
 
 
 // server port listen
 app.listen(8080, ()=>{
     console.log("server is listening to port 8080")
 });
+
+
+/////////////////////////////////////////////////////////////////

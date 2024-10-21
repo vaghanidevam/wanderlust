@@ -1,0 +1,154 @@
+<%- layout("./layout/boilerplate") %>
+<style>
+    .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 35rem;
+        margin: 2rem auto;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn:hover {
+        background-color: #218838;
+    }
+
+    .error {
+        color: red;
+        font-size: 14px;
+    }
+
+    /* Media Query for smaller screens */
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 15px;
+        }
+
+        label {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+            padding: 8px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .form-container {
+            padding: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea {
+            padding: 8px;
+        }
+
+        .btn {
+            font-size: 12px;
+            padding: 6px;
+        }
+    }
+</style>
+</head>
+<body>
+    <%- include("../includes/flash.ejs") %>
+<div class="form-container">
+    <form id="signupForm" class="needs-validation" novalidate action="/signup" method="post">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
+            <div id="usernameError" class="error"></div>
+            <div class="invalid-feedback">Username is required.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+            <div id="emailError" class="error"></div>
+            <div class="invalid-feedback">Please enter a valid email address.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+            <div id="passwordError" class="error"></div>
+            <div class="invalid-feedback">Password must be at least 6 characters long.</div>
+        </div>
+
+        <button type="submit" class="btn">Signup</button>
+    </form>
+</div>
+
+<!-- Include Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('signupForm');
+
+        form.addEventListener('submit', function(event) {
+            let isValid = true;
+            
+            // Clear previous errors
+            document.getElementById('usernameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+
+            // Username validation
+            const username = document.getElementById('username').value.trim();
+            if (username === '') {
+                isValid = false;
+                document.getElementById('username').classList.add('is-invalid');
+            } else {
+                document.getElementById('username').classList.remove('is-invalid');
+            }
+
+            // Email validation
+            const email = document.getElementById('email').value.trim();
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === '' || !emailPattern.test(email)) {
+                isValid = false;
+                document.getElementById('email').classList.add('is-invalid');
+            } else {
+                document.getElementById('email').classList.remove('is-invalid');
+            }
+
+            // Password validation
+            const password = document.getElementById('password').value.trim();
+            if (password === '' || password.length < 6) {
+                isValid = false;
+                document.getElementById('password').classList.add('is-invalid');
+            } else {
+                document.getElementById('password').classList.remove('is-invalid');
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        });
+    });
+</script>
+</body>

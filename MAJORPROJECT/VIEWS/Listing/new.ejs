@@ -80,7 +80,7 @@
         }
     </style>
     <div class="form-container needs-validation" novalidate>
-        <form action="/listings" method="POST" class="needs-validation" novalidate>
+        <form action="/listings" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">Name</label>
                 <input type="text" class="form-control" id="title" name="listing[title]" placeholder="Enter title" required>
@@ -105,9 +105,14 @@
                 </div>
             </div>
     
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="image" class="form-label">Image</label>
                 <input type="text" class="form-control" id="image" name="listing[image]" placeholder="Enter image URL/link" >
+            </div> -->
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload Listing Image</label>
+                <input type="file" class="form-control" id="image" name="listing[image]" placeholder="Enter image URL/link" >
             </div>
     
             <div class="mb-3">

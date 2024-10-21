@@ -2,7 +2,7 @@
 /* navbar */
 
 .navbar{
-    height: 5rem;
+    height: 3.90rem;
     background-color: white;
 }
 .fa-compass{
@@ -62,7 +62,8 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); /* Responsive grid layout */
     gap: 2rem;
-    padding: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     max-width: 100%; /* Ensures the grid container takes up the full width of the screen */
     margin: 0 auto; /* Center the grid container */
 }
@@ -81,7 +82,8 @@ body {
     height: 15rem; /* Fixed image height */
 }
 
-p {
+
+p{
     margin: 1rem 0;
     font-size: 1rem;
     color: #222222;

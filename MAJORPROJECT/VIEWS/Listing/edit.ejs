@@ -7,7 +7,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 35rem;
+            max-width: 50rem;
             margin: 0 auto;
             margin-top: 2rem;
             margin-bottom: 2rem;
@@ -78,9 +78,33 @@
                 padding: 6px;
             }
         }
+
+        .image-upload-preview {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Space between elements */
+}
+
+.current-image {
+    margin-top: 0; /* Remove margin-top for better alignment */
+    padding: 5px; /* Less padding */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    max-width: 100px; /* Adjust width as needed */
+    text-align: center; /* Center align the image */
+}
+
+.current-image img {
+    width: 100%; /* Make the image fill the container */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 4px;
+}
+
+
     </style>
     <div class="form-container">
-        <form action="/listings/<%= listingg._id %>?_method=put" method="POST">
+        <!-- <form action="/listings/<%= listingg._id %>?_method=put" method="POST" enctype="multipart/form-data">
             <label for="title">Name</label>
             <input type="text" id="title" name="listing[title]" value="<%= listingg.title %>"><br/>
 
@@ -90,8 +114,8 @@
             <label for="price">Price</label>
             <input type="number" id="price" name="listing[price]" value="<%= listingg.price %>"><br/>
 
-            <label for="image">Image</label>
-            <input type="text" id="image" name="listing[image]" value="<%= listingg.image %>"><br/>
+            <label for="image">Upload New Image</label>
+            <input type="file" id="image" name="listing[image]" <br/>
 
             <label for="country">Country</label>
             <input type="text" id="country" name="listing[country]" value="<%= listingg.country %>"><br/>
@@ -100,6 +124,53 @@
             <input type="text" id="location" name="listing[location]" value="<%= listingg.location %>"><br/>
 
             <button type="submit" class="edit-b">Edit</button>
+        </form> -->
+
+
+        <form action="/listings/<%= listingg._id %>?_method=put" method="POST" enctype="multipart/form-data" class="needs-validation">
+            <div class="mb-3">
+                <label for="title" class="form-label">Name</label>
+                <input type="text" id="title" name="listing[title]" class="form-control" value="<%= listingg.title %>" required>
+                <div class="invalid-feedback">
+                    Please enter a title.
+                </div>
+            </div>
+        
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="listing[description]" class="form-control" rows="4" required><%= listingg.description %></textarea>
+            </div>
+        
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" id="price" name="listing[price]" class="form-control" value="<%= listingg.price %>" required>
+            </div>
+        
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload New Image</label>
+                <div class="image-upload-preview">
+                    <input type="file" id="image" name="listing[image]" class="form-control" accept="image/*">
+                    
+                    <% if (listingg.image) { %>
+                        <div class="current-image mt-2">
+                            <img src="<%= listingg.image.url %>" alt="Current Image" class="img-fluid">
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        
+            <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" id="country" name="listing[country]" class="form-control" value="<%= listingg.country %>" required>
+            </div>
+        
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" id="location" name="listing[location]" class="form-control" value="<%= listingg.location %>" required>
+            </div>
+        
+            <button type="submit" class="edit-b">Edit</button>
         </form>
+        
     </div>
 </body>

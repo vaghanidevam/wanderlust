@@ -1,19 +1,182 @@
 <%- layout("./layout/boilerplate") %>
 <body>
+<%- include("../includes/flash.ejs") %>
+
+ <style>
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    max-width: 800px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+
+.price-label {
+    font-size: 16px;
+    color: #333;
+}
+
+.filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.filter-item {
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin-left: 10px;
+    padding-right: 2.5rem;
+}
+
+.filter-item:hover {
+    transform: scale(1.05);
+}
+
+.filter-icon {
+    /* font-size: 0.9rem; Adjust icon size */
+    font-size: clamp(0.9rem, 2vw, 2.5rem);
+    color: #555; /* Icon color */
+}
+
+.filter-label {
+    font-size: 10px;
+    color: #555;
+}
+
+
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .filter-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .hidden-option{
+        display: none;
+    }
+    .switch{
+        margin-top: 0rem;
+        margin-bottom: 2rem;
+    }
+    .filter-container{
+      padding-top: 15px;
+      padding-left: 15px;
+      padding-bottom: 0px;
+      padding-right: 15px;
+    }
+  
+}
+
+/*switch*/
+.switch{
+    margin-top: 2rem;
+    margin-right: 2rem;
+    margin-left: 2rem;
+}
+
+
+
+#main{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.text-info{
+    display: none;
+}
+.ii{
+    color: red;
+}
+ </style>
+ <div id="main">
+<div class="filter-container">
+  <div class="filter-options">
+      <div class="filter-item">
+          <i class="fas fa-bed filter-icon"></i>
+          <p><span class="filter-label"><b>Room</b></span></p>
+          
+      </div>
+      <div class="filter-item">
+          <i class="fas fa-umbrella-beach filter-icon"></i>
+          <p> <span class="filter-label"><b>Beach</b> </span></p>
+         
+      </div>
+      <div class="filter-item">
+          <i class="fas fa-mountain filter-icon"></i>
+          <p><span class="filter-label"><b>Mountains</b></span></p>
+          
+      </div>
+      <div class="filter-item">
+          <i class="fas fa-city filter-icon"></i>
+          <p><span class="filter-label"><b>City</b></span></p>
+          
+      </div>
+      <div class="filter-item hidden-option">
+          <i class="fas fa-tree filter-icon"></i>
+          <p><span class="filter-label"><b>Nature</b></span></p>
+          
+      </div>
+      <div class="filter-item hidden-option">
+          <i class="fas fa-ship filter-icon"></i>
+          <p><span class="filter-label"><b>Cruise</b></span></p>
+          
+      </div>
+  </div>
+</div>
+
+    <div class="form-check form-switch switch">
+        <label class="form-check-label" for="flexSwitchCheckDefault"><b>display after tex price</b></label>
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        
+    
+</div>
+
+
+
+</div>
+
     <div class="idd">
+      
        <% for(listing of alllisting){ %>
           <a href="/listings/<%= listing._id %>" class="card-link">
             <div class="id">
-                 <img class="c-img" " src="<%= listing.image %>" alt="">
-               <b><p><%= listing.title %></p></b>
-                 <p><%= listing.description %></p>
-                 <p>&#8377 <%= listing.price.toLocaleString("men-IN")%>/Night</p>
+                 <img class="c-img" " src="<%= listing.image.url %>" alt="">
+               <b><p class="pa"><%= listing.title %></p></b>
+                 <p class="pa"><%= listing.description %></p>
+                    <p >&#8377 <%= listing.price.toLocaleString("men-IN")%>/Night <span class="text-info"><i class="ii">&nbsp; &nbsp;<b>+18%GST</b></i></span></p>
+                 
+                
             </div>
+            
           </a>
        <% } %>
         
         
     </div>
+
+    <script>
+
+        let textSwitch =  document.querySelector("#flexSwitchCheckDefault");
+        textSwitch.addEventListener("click", ()=>{
+            let textInfo = document.getElementsByClassName("text-info");
+             for(info of textInfo){
+                if(info.style.display != "inline"){
+                    info.style.display = "inline";
+                }else{
+                    info.style.display = "none"
+                }
+                
+             }
+        })
+
+    </script>
+  
 </body>
 
 
