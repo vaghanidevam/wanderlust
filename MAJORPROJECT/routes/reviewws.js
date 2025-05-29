@@ -1,18 +1,26 @@
 const express = require("express");
-const router = express.Router({mergeParams:true});
-const asyncWrap = require("../../utils/wrapAsync.js");
-const ExpressError = require("../../utils/ExpressError.js");
+const router = express.Router({ mergeParams: true });
 const rev = require("../models/review.js");
 const listing = require("../models/listing.js");
-const {loginMiddleware, isReviewAuthor} = require("../middleware.js");
+const { loginMiddleware, isReviewAuthor } = require("../middleware.js");
 const reviewController = require("../CONTROLLER/revieww.js");
 
+class ExpressError extends Error {
+    constructor(statusCode, message) {
+        super();
+        this.statusCode = statusCode;
+        this.message = message;
+    }
+};
 
-router.post("/",loginMiddleware, asyncWrap(reviewController.createReview));
+asyncWrap = (fn) => {
+    return (req, res, next) => {
+        fn(req, res, next).catch(next);
+    }
+};
 
-//delete review route
-router.delete("/:reviewId",loginMiddleware,isReviewAuthor, asyncWrap( reviewController.deleteReview ));
+router.post("/", loginMiddleware, asyncWrap(reviewController.createReview));
 
-
+router.delete("/:reviewId", loginMiddleware, isReviewAuthor, asyncWrap(reviewController.deleteReview));
 
 module.exports = router;

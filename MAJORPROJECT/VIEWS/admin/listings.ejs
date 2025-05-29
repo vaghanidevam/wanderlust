@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Show All Listings</title>
+  <style>
+    /* General styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      width: 250px;
+      height: 100%;
+      background-color: #222; /* Dark background */
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding-top: 20px;
+    }
+
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      padding: 15px;
+      text-align: center;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+
+    .sidebar ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      display: block;
+    }
+
+    /* Sidebar hover effect */
+    .sidebar ul li:hover {
+      background-color: #ff4d4d; /* Red on hover */
+    }
+
+    .sidebar ul li a:hover {
+      color: #fff;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 270px;
+      padding: 30px;
+    }
+
+    /* Heading styles */
+    h2 {
+      color: #222;
+      font-size: 2em;
+    }
+
+    /* Table styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: #333;
+    }
+
+    td {
+      background-color: #fff;
+    }
+
+    /* Responsive for mobile */
+    @media (max-width: 767px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <ul>
+      <li><a href="/admin/admin-panel">Dashboard</a></li>
+      <li><a href="/admin/users">Show All Users</a></li>
+      <li><a href="/admin/listings">Show All Listings</a></li>
+      <li><a href="/admin/approve-listing">Approve Listings</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h2>All Listings</h2>
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Price</th>
+        <th>Status</th>
+      </tr>
+      <% listings.forEach(listing => { %>
+      <tr>
+        <td><%= listing.title %></td>
+        <td><%= listing.price %></td>
+        <td><%= listing.status %></td>
+      </tr>
+      <% }) %>
+    </table>
+  </div>
+</body>
+</html>

@@ -2,17 +2,18 @@
 <body>
 <%- include("../includes/flash.ejs") %>
 
- <style>
-
+<style>
+/* --- Filter Styles --- */
 .filter-container {
     display: flex;
     justify-content: space-between;
     padding: 15px;
-    max-width: 800px;
+    max-width: 100%;
     margin-top: 5px;
     margin-left: 5px;
+    overflow-x: auto; /* Allow horizontal scrolling */
+    gap: 10px; /* Space between filter items */
 }
-
 
 .price-label {
     font-size: 16px;
@@ -21,8 +22,10 @@
 
 .filter-options {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: flex-start;
+    gap: 15px;
+    align-items: center;
 }
 
 .filter-item {
@@ -38,9 +41,8 @@
 }
 
 .filter-icon {
-    /* font-size: 0.9rem; Adjust icon size */
-    font-size: clamp(0.9rem, 2vw, 2.5rem);
-    color: #555; /* Icon color */
+    font-size: clamp(1.2rem, 2vw, 2.5rem); /* Adjust size for responsiveness */
+    color: #555;
 }
 
 .filter-label {
@@ -48,135 +50,220 @@
     color: #555;
 }
 
-
-
-/* Responsive Styles */
+/* --- Responsive Styles --- */
 @media (max-width: 600px) {
     .filter-container {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row; /* Keep items in a row for small screens */
+        padding: 10px;
+        justify-content: flex-start; /* Align filter items to the start */
     }
-    .hidden-option{
-        display: none;
+
+    .filter-options {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px;
     }
-    .switch{
-        margin-top: 0rem;
-        margin-bottom: 2rem;
+
+    .filter-item {
+        flex-shrink: 0; /* Prevent shrinking of filter items */
+        font-size: 12px;
     }
-    .filter-container{
-      padding-top: 15px;
-      padding-left: 15px;
-      padding-bottom: 0px;
-      padding-right: 15px;
+
+    .filter-icon {
+        font-size: 1rem; /* Smaller icons on mobile */
     }
-  
+
+    /* Add horizontal scroll on small screens */
+    .filter-container {
+        overflow-x: auto;
+    }
 }
 
-/*switch*/
-.switch{
+/* --- Switch Styles --- */
+.switch {
     margin-top: 2rem;
     margin-right: 2rem;
     margin-left: 2rem;
 }
 
-
-
-#main{
+/* --- Main Container --- */
+#main {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
 }
-.text-info{
-    display: none;
+
+/* --- Card Container --- */
+.idd {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 2rem;
+    gap: 20px;
 }
-.ii{
-    color: red;
+
+/* --- Single Card --- */
+.card-link {
+    text-decoration: none;
+    color: inherit;
 }
- </style>
- <div id="main">
-<div class="filter-container">
-  <div class="filter-options">
-      <div class="filter-item">
-          <i class="fas fa-bed filter-icon"></i>
-          <p><span class="filter-label"><b>Room</b></span></p>
-          
-      </div>
-      <div class="filter-item">
-          <i class="fas fa-umbrella-beach filter-icon"></i>
-          <p> <span class="filter-label"><b>Beach</b> </span></p>
-         
-      </div>
-      <div class="filter-item">
-          <i class="fas fa-mountain filter-icon"></i>
-          <p><span class="filter-label"><b>Mountains</b></span></p>
-          
-      </div>
-      <div class="filter-item">
-          <i class="fas fa-city filter-icon"></i>
-          <p><span class="filter-label"><b>City</b></span></p>
-          
-      </div>
-      <div class="filter-item hidden-option">
-          <i class="fas fa-tree filter-icon"></i>
-          <p><span class="filter-label"><b>Nature</b></span></p>
-          
-      </div>
-      <div class="filter-item hidden-option">
-          <i class="fas fa-ship filter-icon"></i>
-          <p><span class="filter-label"><b>Cruise</b></span></p>
-          
-      </div>
-  </div>
-</div>
+.id {
+    width: 300px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* Ensure the card layout is vertical */
+}
 
-    <div class="form-check form-switch switch">
-        <label class="form-check-label" for="flexSwitchCheckDefault"><b>display after tex price</b></label>
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-        
-    
-</div>
+/* --- Card Image --- */
+.c-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
 
+/* --- Card Text --- */
+.pa {
+    margin: 10px;
+    font-size: 1rem;
+    overflow: hidden; /* Prevent text from overflowing */
+    white-space: normal; /* Allow the text to wrap to the next line */
+    text-overflow: ellipsis; /* Optionally add '...' for overflow text */
+    line-height: 1.5; /* Adjust line spacing for readability */
+    max-height: 6rem; /* Restrict the height to show 3-4 lines, for example */
+    transition: max-height 0.3s ease; /* Smooth transition when expanding */
+}
 
+/* If you want the full description without cutting off */
+.pa.full {
+    max-height: none;
+    white-space: normal;
+    text-overflow: unset;
+}
 
-</div>
+/* Card hover to show full description on hover */
+.id:hover .pa {
+    max-height: none; /* Remove max-height restriction when hovering */
+}
+</style>
 
-    <div class="idd">
-      
-       <% for(listing of alllisting){ %>
-          <a href="/listings/<%= listing._id %>" class="card-link">
-            <div class="id">
-                 <img class="c-img" " src="<%= listing.image.url %>" alt="">
-               <b><p class="pa"><%= listing.title %></p></b>
-                 <p class="pa"><%= listing.description %></p>
-                    <p >&#8377 <%= listing.price.toLocaleString("men-IN")%>/Night <span class="text-info"><i class="ii">&nbsp; &nbsp;<b>+18%GST</b></i></span></p>
-                 
-                
+<div id="main">
+    <div class="filter-container">
+        <div class="filter-options">
+            <div class="filter-item" data-value="All">
+                <i class="fas fa-th filter-icon"></i>
+                <p><span class="filter-label"><b>All</b></span></p>
             </div>
-            
-          </a>
-       <% } %>
-        
-        
+            <div class="filter-item" data-value="Room">
+                <i class="fas fa-bed filter-icon"></i>
+                <p><span class="filter-label"><b>Room</b></span></p>
+            </div>
+            <div class="filter-item" data-value="Beach">
+                <i class="fas fa-umbrella-beach filter-icon"></i>
+                <p><span class="filter-label"><b>Beach</b></span></p>
+            </div>
+            <div class="filter-item" data-value="Mountain">
+                <i class="fas fa-mountain filter-icon"></i>
+                <p><span class="filter-label"><b>Mountain</b></span></p>
+            </div>
+            <div class="filter-item" data-value="City">
+                <i class="fas fa-city filter-icon"></i>
+                <p><span class="filter-label"><b>City</b></span></p>
+            </div>
+            <div class="filter-item hidden-option" data-value="Nature">
+                <i class="fas fa-tree filter-icon"></i>
+                <p><span class="filter-label"><b>Nature</b></span></p>
+            </div>
+            <div class="filter-item hidden-option" data-value="Forest">
+                <i class="fas fa-leaf filter-icon"></i>
+                <p><span class="filter-label"><b>Forest</b></span></p>
+            </div>
+            <div class="filter-item hidden-option" data-value="Village">
+                <i class="fas fa-home filter-icon"></i>
+                <p><span class="filter-label"><b>Village</b></span></p>
+            </div>
+            <div class="filter-item hidden-option" data-value="Desert">
+                <i class="fas fa-sun filter-icon"></i>
+                <p><span class="filter-label"><b>Desert</b></span></p>
+            </div>
+            <div class="filter-item hidden-option" data-value="Lake">
+                <i class="fas fa-water filter-icon"></i>
+                <p><span class="filter-label"><b>Lake</b></span></p>
+            </div>
+        </div>
     </div>
+</div>
 
-    <script>
+<div class="form-check form-switch switch">
+    <label class="form-check-label" for="flexSwitchCheckDefault"><b>Display After Tax Price</b></label>
+    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+</div>
 
-        let textSwitch =  document.querySelector("#flexSwitchCheckDefault");
-        textSwitch.addEventListener("click", ()=>{
-            let textInfo = document.getElementsByClassName("text-info");
-             for(info of textInfo){
-                if(info.style.display != "inline"){
-                    info.style.display = "inline";
-                }else{
-                    info.style.display = "none"
-                }
-                
-             }
-        })
+<div class="idd">
+    <% for(let listing of alllisting){ %>
+        <% if (listing.status === 'approved') { %> <!-- Check if status is 'approved' -->
+        <a href="/listings/<%= listing._id %>" class="card-link">
+            <div class="id" data-type="<%= listing.type %>">
+                <img class="c-img" src="<%= listing.image.url %>" alt=""/>
+                <b><p class="pa"><%= listing.title %></p></b>
+                <p class="pa" id="description<%= listing._id %>">
+                    <%= listing.description %>
+                </p>
+                <p class="pa">&#8377;<%= listing.price.toLocaleString("en-IN") %>/Night 
+                    <span class="text-info">
+                        <i class="ii">&nbsp;&nbsp;<b>+18% GST</b></i>
+                    </span>
+                </p>
+            </div>
+        </a>
+        <% } %> <!-- End of status check -->
+    <% } %>
+</div>
 
-    </script>
-  
+<script>
+// Switch for toggling display of after-tax price
+let textSwitch = document.querySelector("#flexSwitchCheckDefault");
+textSwitch.addEventListener("click", () => {
+    let textInfo = document.getElementsByClassName("text-info");
+    for (let info of textInfo) {
+        if (info.style.display !== "inline") {
+            info.style.display = "inline";
+        } else {
+            info.style.display = "none";
+        }
+    }
+});
+
+// Filtering logic for cards
+const filterItems = document.querySelectorAll(".filter-item");
+const cards = document.querySelectorAll(".id");
+
+filterItems.forEach(item => {
+    item.addEventListener("click", () => {
+        const selectedType = item.getAttribute("data-value");
+
+        cards.forEach(card => {
+            const cardType = card.getAttribute("data-type");
+
+            if (selectedType === "All" || cardType === selectedType) {
+                card.parentElement.style.display = "block"; // card is inside <a> tag
+            } else {
+                card.parentElement.style.display = "none";
+            }
+        });
+    });
+});
+
+// Toggle full description on click
+function toggleDescription(id) {
+    let description = document.getElementById('description' + id);
+    description.classList.toggle('full'); // Toggle the 'full' class to expand description
+}
+</script>
+
 </body>
-
-

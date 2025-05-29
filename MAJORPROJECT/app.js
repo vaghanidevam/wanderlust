@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const mehtodOverride =  require("method-override");
 const ejsMate = require("ejs-mate");
-const ExpressError = require("../utils/ExpressError.js");
+// const ExpressError = require("./u/ExpressError.js");
 const Joi = require('joi');
 const session = require("express-session");
 const MongoStore = require('connect-mongo');
@@ -21,6 +21,7 @@ const user = require("../MAJORPROJECT/models/users.js");
 const listingRouter = require("../MAJORPROJECT/routes/listings.js");
 const reviewRouter = require("../MAJORPROJECT/routes/reviewws.js");
 const userRouter = require("../MAJORPROJECT/routes/user.js");
+const adminRoutes = require('./routes/admin.js');
 
 
 app.set("view engine", "ejs");
@@ -31,13 +32,21 @@ app.use(mehtodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.json());
 
+ 
+class ExpressError extends Error{
+    constructor(statusCode, message){
+        super();
+        this.statusCode = statusCode;
+        this.message = message;
 
-
-
+    }
+}
 
 
 /////////////////////////////////////////////////////////////////
-const MONOGO_URL = "mongodb+srv://wanderlust65:PJPTENxFaxnR40uN@cluster0.v6itl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// const MONOGO_URL = "mongodb+srv://wanderlust65:PJPTENxFaxnR40uN@cluster0.v6itl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const MONOGO_URL = "mongodb://localhost:27017/test"
+
 main()
 .then(()=>{
     console.log("connected to DB");
@@ -53,19 +62,19 @@ async function main(){
 
 /////////////////////////////////////////////////////////////////
 
-const store = MongoStore.create({
-    mongoUrl: 'mongodb+srv://wanderlust65:PJPTENxFaxnR40uN@cluster0.v6itl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
-    crypto:{
-        secret: "wanderlust"
-    },
-    touchAfter: 24*3600
-  });
+// const store = MongoStore.create({
+//     mongoUrl: 'mongodb+srv://wanderlust65:PJPTENxFaxnR40uN@cluster0.v6itl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+//     crypto:{
+//         secret: "wanderlust"
+//     },
+//     touchAfter: 24*3600
+//   });
 //   store.on("error", ()=>{
 //     console.log("error in mongo session store ", err);
 //   });
 
 const sessionOptions = {
-    store:store,
+    // store:store,
     secret: "wanderlust",
     resave: false,
     saveUninitialized: true,
@@ -119,6 +128,7 @@ app.use((req, res, next)=>{
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
+app.use('/admin', adminRoutes);  // This will prefix all admin routes with '/admin'
 
 
 app.all('*',(req, res, next)=>{

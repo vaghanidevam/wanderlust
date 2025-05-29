@@ -1,32 +1,57 @@
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-       aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse nav" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-link" href="/listings">Explore</a>
-        
-        </div>
-        <div class="navbar-nav" >
-          <a class="nav-link" href="/listings/new">Airbnb your home</a>
-          <% if(!curruser){ %>
-          <a class="nav-link" href="/signup" href="/"><b>SignUp</b></a>
-          <a class="nav-link" href="/login"><b>Login</b></a>
-          <% } %>
-          <% if(curruser){ %>
-          <a class="nav-link" href="/logout"><b>Logout</b></a>
-          <% } %>
-        </div>
+<nav class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+      <div class="navbar-nav">
+        <a class="nav-link" href="/listings/new">Airbnb your home</a>
+        <% if(!curruser){ %>
+        <a class="nav-link" href="/signup"><b>SignUp</b></a>
+        <a class="nav-link" href="/login"><b>Login</b></a>
+        <% } %>
+        <% if(curruser){ %>
+        <!-- Show Admin Panel only for admin users -->
+        <% if(curruser.role === "admin"){ %>
+        <a class="nav-link" href="/admin/admin-panel"><b>Admin Panel</b></a>
+        <% } %>
+        <a class="nav-link" href="/logout"><b>Logout</b></a>
+        <% } %>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <style>
-       .nav{
-        display: flex;
-        justify-content: space-between;
-       }
-  </style>
+<style>
+  /* Navbar flex and spacing */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+  }
+  .navbar-nav {
+    display: flex;
+    gap: 1rem;
+  }
+
+  /* Align "Explore" to the right side in larger screens */
+  .navbar-nav.ms-auto {
+    margin-left: auto;
+  }
+
+  /* Responsive behavior: mobile view */
+  @media (max-width: 767px) {
+    .navbar-nav {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .navbar-nav.ms-auto {
+      margin-left: 0;
+    }
+  }
+</style>

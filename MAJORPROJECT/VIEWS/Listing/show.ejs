@@ -1,22 +1,4 @@
 <%- layout("./layout/boilerplate") %>
-<!--<body>
-
-    <h1>Listing Details: </h1>
-
-    <ul>
-        <li><%= listingg.title %></li>
-        <li><%= listingg.description %></li>
-        <li> &#8377 <%= listingg.price.toLocaleString("en-IN"); %>/Night</li>
-        <li><%= listingg.location %></li>
-        <li><%= listingg.country %></li>
-    </ul>
-    <br/>
-    <a href="/listings/<%= listingg._id %>/edit">edit your listing</a>
-    <br/>
-    <form action="/listings/<%= listingg._id %>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
-</body> -->
 
     <style>
         body {
@@ -111,6 +93,12 @@
                 font-size: 16px;
                 padding: 8px 15px;
             }
+
+            .image-container {
+          
+            padding-right: 10px;
+            padding-left: 10px;
+        }
         }
 
         @media (max-width: 480px) {
@@ -126,6 +114,7 @@
                 font-size: 14px;
             }
 
+        
             .details-container .buttons button {
                 font-size: 14px;
                 padding: 6px 10px;
@@ -509,8 +498,46 @@
 #map {
             height: 400px; /* Adjust height as needed */
             width: 100%; /* Full width */
+            margin-bottom: 10px;
         }
+/* Booking Section Styling */
+.booking-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
 
+.booking-container h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.booking-container p {
+    font-size: 1.1em;
+    margin: 5px 0;
+    color: #555;
+}
+
+.booking-container strong {
+    color: #333;
+}
+
+.booking-container .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+p{
+  white-space: pre-wrap;  /* This preserves spaces and line breaks */
+  word-wrap: break-word;
+  font-size: 16px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+}
 
     </style>
 </head>
@@ -522,13 +549,11 @@
         <img src="<%= listingg.image.url %>" alt="<%= listingg.title %>">
     </div>
 
-
-   
-
     <div class="details-container">
         <p><b>Owned By:</b> <%= listingg.owner.username %></p>
 
         <p><strong>Price:</strong> &#8377 <%= listingg.price.toLocaleString("en-IN"); %>/Night</p>
+        <p><strong>Type:</strong><%= listingg.type %> </p>
         <p><strong>Description:</strong> <%= listingg.description %></p>
         <p><strong>Location:</strong> <%= listingg.location %></p>
         <p><strong>Country:</strong> <%= listingg.country %></p>
@@ -542,6 +567,11 @@
             </form>
         </div>
         <% } %>
+        <div class="booking-container">
+          <h3>Booking Details</h3>
+          <p><strong>Phone Number:</strong> <%= listingg.phoneNumber %></p>
+          <p><strong>Email:</strong> <%= listingg.email %></p>
+      </div>
         <hr>
         <% if(curruser){ %>
          <form action="/listings/<%= listingg.id %>/reviews" method="post" class="review-form" id="reviewForm" novalidate>

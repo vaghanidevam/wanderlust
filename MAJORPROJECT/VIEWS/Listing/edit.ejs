@@ -21,7 +21,10 @@
 
         input[type="text"],
         input[type="number"],
-        textarea {
+        input[type="email"],
+        input[type="tel"],
+        textarea,
+        select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -69,6 +72,9 @@
 
             input[type="text"],
             input[type="number"],
+            input[type="email"],
+            input[type="tel"],
+            select,
             textarea {
                 padding: 8px;
             }
@@ -80,53 +86,28 @@
         }
 
         .image-upload-preview {
-    display: flex;
-    align-items: center; /* Center items vertically */
-    gap: 10px; /* Space between elements */
-}
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.current-image {
-    margin-top: 0; /* Remove margin-top for better alignment */
-    padding: 5px; /* Less padding */
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    max-width: 100px; /* Adjust width as needed */
-    text-align: center; /* Center align the image */
-}
+        .current-image {
+            margin-top: 0;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            max-width: 100px;
+            text-align: center;
+        }
 
-.current-image img {
-    width: 100%; /* Make the image fill the container */
-    height: auto; /* Maintain aspect ratio */
-    border-radius: 4px;
-}
-
-
+        .current-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
     </style>
     <div class="form-container">
-        <!-- <form action="/listings/<%= listingg._id %>?_method=put" method="POST" enctype="multipart/form-data">
-            <label for="title">Name</label>
-            <input type="text" id="title" name="listing[title]" value="<%= listingg.title %>"><br/>
-
-            <label for="description">Description</label>
-            <textarea id="description" name="listing[description]" rows="4"><%= listingg.description %></textarea><br/>
-
-            <label for="price">Price</label>
-            <input type="number" id="price" name="listing[price]" value="<%= listingg.price %>"><br/>
-
-            <label for="image">Upload New Image</label>
-            <input type="file" id="image" name="listing[image]" <br/>
-
-            <label for="country">Country</label>
-            <input type="text" id="country" name="listing[country]" value="<%= listingg.country %>"><br/>
-
-            <label for="location">Location</label>
-            <input type="text" id="location" name="listing[location]" value="<%= listingg.location %>"><br/>
-
-            <button type="submit" class="edit-b">Edit</button>
-        </form> -->
-
-
         <form action="/listings/<%= listingg._id %>?_method=put" method="POST" enctype="multipart/form-data" class="needs-validation">
             <div class="mb-3">
                 <label for="title" class="form-label">Name</label>
@@ -168,9 +149,42 @@
                 <label for="location" class="form-label">Location</label>
                 <input type="text" id="location" name="listing[location]" class="form-control" value="<%= listingg.location %>" required>
             </div>
+
+            <!-- Added Phone Number and Email Fields -->
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" id="phone" name="listing[phoneNumber]" class="form-control" value="<%= listingg.phoneNumber %>" placeholder="Enter phone number" required>
+                <div class="invalid-feedback">
+                    Please enter a valid phone number.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="listing[email]" class="form-control" value="<%= listingg.email %>" placeholder="Enter email" required>
+                <div class="invalid-feedback">
+                    Please enter a valid email address.
+                </div>
+            </div>
+
+            <!-- Added Type Field -->
+            <div class="mb-3">
+                <label for="type"  class="form-label">Type</label>
+                <select class="form-control" id="type" name="listing[type]" required>
+                    <option value="" disabled selected><%= listingg.type %></option>
+                    <option value="Room">Room</option>
+                    <option value="Beach">Beach</option>
+                    <option value="Mountain">Mountain</option>
+                    <option value="City">City</option>
+                    <option value="Nature">Nature</option>
+                    <option value="Forest">Forest</option>
+                    <option value="Village">Village</option>
+                    <option value="Desert">Desert</option>
+                    <option value="Lake">Lake</option>
+                </select>
+            </div>
         
             <button type="submit" class="edit-b">Edit</button>
         </form>
-        
     </div>
 </body>
